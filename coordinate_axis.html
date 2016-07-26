@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>坐标轴</title>
+    <style type="text/css">
+        body{
+            background-color: #f4f4f4;
+        }
+        #canvas{
+            box-shadow: 2px 4px 4px #ccc;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"  width="600" height="400"></canvas>
+<script type="text/javascript">
+   var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var TOP=50,
+        AXIS_X=canvas.width-2*TOP,
+        AXIS_Y=canvas.height-2*TOP;
+   var SPACE=10;
+   var MIN_HEIGHT=5;
+   var MAX_HEIGHT=10;
+
+
+    // 画网格
+
+    function drawGrid(context,stepx,stepy,color){
+        context.strokeStyle=color;
+        context.lineWidth=0.5;
+        for(var i=stepx+0.5;i<canvas.width;i=i+stepx) {
+            context.moveTo(i,0);
+            context.lineTo(i,canvas.height);
+            context.stroke();
+        }
+
+        for(var i=stepy+0.5;i<canvas.height;i=i+stepy)
+        {
+            context.moveTo(0,i);
+            context.lineTo(canvas.width,i);
+            context.stroke();
+        }
+
+    }
+    drawGrid(context,10,10,'lightgray');
+
+    // 画坐标轴
+
+    context.beginPath();
+    context.moveTo(TOP,TOP+0.5);
+    context.lineTo(TOP+AXIS_X,TOP+0.5);
+    context.strokeStyle="#ff5247";
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(TOP+0.5,TOP);
+    context.lineTo(TOP+0.5,TOP+AXIS_Y);
+    context.stroke();
+
+   context.fillStyle="#ff5247";
+   context.fillText(0,TOP-MIN_HEIGHT,TOP);
+
+   function drawXaxis(context,TOP,AXIS_X){
+
+       for(var i=TOP+SPACE+0.5,j=1;i<AXIS_X+TOP,j<=((AXIS_X-20)/SPACE);i=i+SPACE,j++){
+           if(j%5==0){
+               context.moveTo(i,TOP);
+               context.lineTo(i,TOP+MAX_HEIGHT);
+               context.fillText(j,i,TOP-5);
+           }
+           context.moveTo(i,TOP);
+           context.lineTo(i,TOP+MIN_HEIGHT);
+           context.stroke();
+       }
+   }
+
+   function drawYaxis(context,TOP,AXIS_Y){
+       for(var i=TOP+SPACE+0.5,j=1;i<AXIS_Y+TOP,j<((AXIS_Y-20)/10);i=i+SPACE,j++){
+           context.moveTo(TOP,i);
+           context.lineTo(TOP+MIN_HEIGHT,i);
+           if(j%5==0){
+               context.moveTo(TOP,i);
+               context.lineTo(TOP+MAX_HEIGHT,i);
+               context.fillText(j,TOP-MAX_HEIGHT-MIN_HEIGHT,i);
+           }
+           context.stroke();
+       }
+   }
+
+
+    drawXaxis(context,TOP,AXIS_X);
+    drawYaxis(context,TOP,AXIS_Y);
+
+</script>
+
+</body>
+</html>

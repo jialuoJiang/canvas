@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>橡皮筋式的线条绘制</title>
+    <style type="text/css">
+        body {
+            background-color: #f4f4f4;
+        }
+
+        #canvas {
+            background-color: #fff;
+            box-shadow: 2px 2px 4px #ccc;
+        }
+
+        #controls {
+            margin-bottom: 10px;
+        }
+
+        #strokestylesheet, #guidewirescheckbox {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+<div id="controls">
+    颜色：<select id="strokestylesheet">
+    <option value="red">red</option>
+    <option value="blue">blue</option>
+    <option value="black">black</option>
+    <option value="green">green</option>
+    <option value="yellow">yellow</option>
+</select>
+    辅助线：<input id="guidewirescheckbox" type="checkbox" checked>
+    <input type="button" value="清空canvas" id="eraseall">
+</div>
+<canvas id="canvas" width="800" height="600"></canvas>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                earseall = document.getElementById("eraseall"),
+                guidewirecheckbox = document.getElementById("guidewirescheckbox"),
+                strokecolor = document.getElementById("strokestylesheet"),
+                drawingSurfaceImageData,
+                mousedown = {},
+                rubberbandRect = {},
+                dragging = false,
+                guidewires = guidewirecheckbox.checked;
+
+
+        // 画网格
+        function drawGrid(context, color, stepx, stepy) {
+            context.strokeStyle = color;
+            for (var i = stepx + 0.5; i < canvas.width; i = i + stepx) {
+                context.moveTo(i, 0);
+                context.lineTo(i, canvas.height);
+                context.stroke();
+            }
+
+            for (var i = stepy + 0.5; i < canvas.height; i = i + stepy) {
+                context.moveTo(0, i);
+                context.lineTo(canvas.width, i);
+                context.stroke();
+            }
+        }
+
+        drawGrid(context, 'lightgray', 10, 10);
+
+        function windowToCanvas(x, y) {
+            var bbox = canvas.getBoundingClientRect(); //getBoundingClientRect 返回一个矩形对象，包含left,top,right,bottom，表示元素各边与页面上边和左边的距离
+             // bbox 返回的是canvas元素 距离 页面上边和左边的距离
+           // console.log(bbox.left,bbox.top,bbox.right,bbox.bottom,'----e')
+            return {
+                x: x - bbox.left ,
+                y: y - bbox.top
+            };
+        }
+
+        function saveDrawingSurface() {
+            //getImageData() 复制指定矩形上的像素数据
+            drawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        }
+
+        function restoreDrawingSurface() {
+            // putImageData()将图像数据放回画布
+            context.putImageData(drawingSurfaceImageData, 0, 0);
+        }
+
+        function updateRubberbandRectangle(loc) {
+            console.log(loc.x,loc.y,mousedown.x,mousedown.y)
+            rubberbandRect.width = Math.abs(loc.x - mousedown.x);
+            rubberbandRect.height = Math.abs(loc.y - mousedown.y);
+            if (loc.x > mousedown.x) {
+                rubberbandRect.left = mousedown.x;
+            } else {
+                rubberbandRect.left = loc.x;
+            }
+            if (loc.y > mousedown.y) {
+                rubberbandRect.top = mousedown.y;
+            } else {
+                rubberbandRect.top = loc.y;
+            }
+        }
+
+        // 画 线条
+        function drawRbberbandShape(loc) {
+            context.beginPath();
+            context.moveTo(mousedown.x, mousedown.y);
+            context.lineTo(loc.x, loc.y);
+            context.stroke();
+        }
+
+        // 实时更新
+        function updateRubberband(loc) {
+            updateRubberbandRectangle(loc);
+            drawRbberbandShape(loc);
+        }
+
+        // 画横向辅助线
+        function drawHorizontalLine(y) {
+            context.beginPath();
+            context.moveTo(0, y + 0.5);
+            context.lineTo(context.canvas.width, y + 0.5);
+            context.stroke();
+        }
+
+        //画纵向辅助线
+        function drawVerticalLine(x) {
+            context.beginPath();
+            context.moveTo(x + 0.5, 0);
+            context.lineTo(x + 0.5, context.canvas.height);
+            context.stroke();
+        }
+
+
+        // 辅助线样式 等
+        function drawGuidewires(x, y) {
+            context.save();
+            context.strokeStyle = '#221E20';
+            context.lineWidth = 0.5;
+            drawHorizontalLine(y);
+            drawVerticalLine(x);
+            context.restore();
+        }
+
+        // 鼠标事件--点击鼠标
+        canvas.onmousedown = function (e) {
+            var loc = windowToCanvas(e.clientX, e.clientY);// loc 相对于 canvas原点的 点
+            e.preventDefault(); // 该方法将通知Web浏览器不要执行与事件关联的默认动作（如果存在这样的动作）
+            saveDrawingSurface();// 复制画布上的像素
+            mousedown.x = loc.x;
+            mousedown.y = loc.y;
+            dragging = true;
+        }
+
+        canvas.onmousemove = function (e) {
+            var loc;
+            if (dragging) {
+                e.preventDefault();
+                loc = windowToCanvas(e.clientX, e.clientY);
+                restoreDrawingSurface();// 将 复制的像素放回到画布上
+                updateRubberband(loc);
+                if (guidewires) {
+                    drawGuidewires(loc.x, loc.y);
+                }
+            }
+        }
+
+        canvas.onmouseup = function (e) {
+            console.log('---松开鼠标----')
+            loc = windowToCanvas(e.clientX, e.clientY);
+            restoreDrawingSurface();
+            updateRubberband(loc);
+            dragging = false;
+        }
+
+        earseall.onclick = function (e) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid(context, 'lightgray', 10, 10);
+            saveDrawingSurface();
+        }
+
+        strokecolor.onchange = function (e) {
+            context.strokeStyle = strokecolor.value;
+        }
+        guidewirecheckbox.onchange = function (e) {
+            guidewires = guidewirecheckbox.checked;
+        }
+
+        context.strokeStyle = strokecolor.value;
+        drawGrid(context, 'lightgray', 10, 10);
+
+    }
+
+
+</script>
+
+</body>
+</html>

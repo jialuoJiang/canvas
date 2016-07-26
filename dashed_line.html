@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虚线 dashed_line & 点划线 dotted_line</title>
+</head>
+<body>
+
+<canvas id="canvas" width="500" height="500">
+
+</canvas>
+
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+
+
+    // 绘制虚线
+    function drawDashLine(context,beginPo,dashLength,dashSpace,endPo,color){
+        var theDashLineLength=endPo-beginPo;
+        var theDashNum=Math.floor(theDashLineLength/(dashLength+dashSpace));
+        context.strokeStyle=color;
+        context.lineWidth=3;
+        for(var i=0;i<theDashNum;i++){
+           context.moveTo(beginPo+(i*(dashLength+dashSpace)),50+0.5);
+            context.lineTo(beginPo+(i*8)+dashLength,50+0.5);
+            context.stroke();
+        }
+
+    }
+    drawDashLine(context,30,5,3,canvas.width-30,'red');
+
+
+    // 绘制点划线
+
+    function drawDottedLine(context,beginPo,dottedLenght,dottedSpace,endPo,color){
+        var theDottedLength=endPo-beginPo;
+        var theDottedNum=Math.floor(theDottedLength/(dottedLenght+dottedSpace));
+        context.strokeStyle=color;
+        context.lineWidth=1;
+        for(var i=0;i<theDottedNum;i++){
+            context.moveTo(beginPo+(i*(dottedLenght+dottedSpace)),70+0.5);
+            context.lineTo(beginPo+(i*(dottedLenght+dottedSpace)+dottedLenght),70+0.5);
+            context.stroke();
+        }
+    }
+    drawDottedLine(context,30,1,1,canvas.width-30,'green');
+
+
+</script>
+
+</body>
+</html>
