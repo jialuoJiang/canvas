@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>五角星</title>
+</head>
+<body>
+<canvas id="canvas" style="border:1px solid #dcdcdc; margin-top:120px; margin-left:120px;"></canvas>
+
+<script type="text/javascript">
+    var WINDOW_HEIGHT=768;
+    var WINDOW_WIDTH=1024;
+
+
+    window.onload=function(){
+        var canvas=document.getElementById("canvas");
+        var context=canvas.getContext("2d");
+
+        canvas.width=WINDOW_WIDTH;
+        canvas.height=WINDOW_HEIGHT;
+
+
+        // 绘制一个黑色的背景
+        context.fillStyle='#133651';
+        context.fillRect(0,0,canvas.width,canvas.height);  // 直接绘制矩形 fillRect
+
+        // 画 500个星星
+
+        for(var i=0;i<100;i++){
+            var r=Math.random()*10+2;
+
+            var deg=Math.random()* 360;
+            var shiftX=Math.random()*canvas.width;
+            var shiftY=Math.random()*canvas.height;
+
+            drawStar(context,2*r,r,shiftX,shiftY,deg); // context 、大圆半径，小圆半径、偏移、旋转角度
+        }
+    }
+
+    function drawStar(context,R,r,shiftX,shiftY,deg){
+        context.lineWidth=8;
+        context.lineJoin='miter';// 设置  线与线 相交处
+        context.miterLimit=20;
+        context.lineCap='round';
+        context.strokeStyle='#fb5';
+        context.fillStyle='#fb3';
+        context.beginPath();
+        for(var i=0;i<5;i++){
+            context.lineTo(Math.cos((18+i*72)/180*Math.PI-deg)*R+shiftX ,
+                    -Math.sin((18+i*72)/180*Math.PI-deg)*R+shiftY);
+            context.lineTo(Math.cos((54+i*72)/180*Math.PI-deg)*r+shiftX,
+                    -Math.sin((54+i*72)/180*Math.PI-deg)*r+shiftY)
+        }
+        context.closePath();
+        context.fill();
+        context.stroke()
+    }
+</script>
+
+</body>
+</html>

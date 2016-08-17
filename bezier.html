@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas--test</title>
+</head>
+<body>
+
+<canvas id="canvas" style="margin:200px"></canvas>
+<script type="text/javascript">
+    var HEIGHT=800;
+    var WIDTH=600;
+    window.onload=function(){
+        var canvas=document.getElementById("canvas");
+        canvas.height=HEIGHT;
+        canvas.width=WIDTH;
+        if(canvas.getContext){
+            var contxt=canvas.getContext("2d");
+
+           /* contxt.fillRect(50,50,100,100);
+            contxt.strokeRect(30,30,140,140);
+            contxt.clearRect(70,70,60,60)*/
+
+
+           /* 贝塞尔以及二次贝塞尔  曲线
+           * quadraticCurveTo(cp1x,cp1y,x,y);  x,y为结束点 ，cp1x,cp1y为控制点
+           *
+           * bezierCurveTo(cp1x,cp1y,cp2x,cp2y,x,y)
+           *
+           *
+           *
+           * */
+
+            contxt.beginPath();
+            contxt.moveTo(75,25);
+            contxt.quadraticCurveTo(25,25,25,62.5);
+            contxt.quadraticCurveTo(25,100,50,100);
+            contxt.quadraticCurveTo(50,120,30,125);
+            contxt.quadraticCurveTo(60,120,65,100);
+            contxt.quadraticCurveTo(125,100,125,62.5);
+            contxt.quadraticCurveTo(125,25,75,25);
+            contxt.stroke();
+
+
+            contxt.beginPath();
+            contxt.moveTo(75,40);
+            contxt.bezierCurveTo(75,37,70,25,50,25);
+            contxt.bezierCurveTo(20,25,20,62.5,20,62.5);
+            contxt.bezierCurveTo(20,80,40,102,75,120);
+            contxt.bezierCurveTo(110,102,130,80,130,62.5);
+            contxt.bezierCurveTo(130,62.5,130,25,100,25);
+            contxt.bezierCurveTo(85,25,75,37,75,40);
+            contxt.fill();
+
+
+
+
+
+        }
+    }
+</script>
+
+</body>
+</html>

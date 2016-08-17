@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas 倒数计时</title>
+</head>
+<body>
+
+<canvas id="canvas" style="margin-left:200px; margin-top:120px"></canvas>
+
+<script type="text/javascript">
+    var HEIGHT = 500;
+    var WIDTH = 700;
+    var r = 4;
+    var R = 5;
+    var MARGIN_TOP = 30;
+    var MARGIN_LEFT = 20;
+
+    window.onload = function () {
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        canvas.height = HEIGHT;
+        canvas.width = WIDTH;
+
+        var digit =
+                [
+                    [
+                        [0, 0, 1, 1, 1, 0, 0],
+                        [0, 1, 1, 0, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 0, 1, 1, 0],
+                        [0, 0, 1, 1, 1, 0, 0]
+                    ],//0
+                    [
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 1, 1, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [1, 1, 1, 1, 1, 1, 1]
+                    ],//1
+                    [
+                        [0, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 1, 1, 0, 0, 0],
+                        [0, 1, 1, 0, 0, 0, 0],
+                        [1, 1, 0, 0, 0, 0, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 1, 1, 1, 1, 1]
+                    ],//2
+                    [
+                        [1, 1, 1, 1, 1, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 1, 1, 1, 0, 0],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 0]
+                    ],//3
+                    [
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1, 1, 0],
+                        [0, 1, 1, 0, 1, 1, 0],
+                        [1, 1, 0, 0, 1, 1, 0],
+                        [1, 1, 1, 1, 1, 1, 1],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 1, 1]
+                    ],//4
+                    [
+                        [1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 0, 0, 0, 0, 0],
+                        [1, 1, 0, 0, 0, 0, 0],
+                        [1, 1, 1, 1, 1, 1, 0],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 0]
+                    ],//5
+                    [
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 1, 1, 0, 0, 0],
+                        [0, 1, 1, 0, 0, 0, 0],
+                        [1, 1, 0, 0, 0, 0, 0],
+                        [1, 1, 0, 1, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 0]
+                    ],//6
+                    [
+                        [1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 0, 1, 1, 0, 0, 0],
+                        [0, 0, 1, 1, 0, 0, 0],
+                        [0, 0, 1, 1, 0, 0, 0],
+                        [0, 0, 1, 1, 0, 0, 0]
+                    ],//7
+                    [
+                        [0, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 0]
+                    ],//8
+                    [
+                        [0, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [1, 1, 0, 0, 0, 1, 1],
+                        [0, 1, 1, 1, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 0, 1, 1],
+                        [0, 0, 0, 0, 1, 1, 0],
+                        [0, 0, 0, 1, 1, 0, 0],
+                        [0, 1, 1, 0, 0, 0, 0]
+                    ],//9
+                    [
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 1, 1, 0],
+                        [0, 1, 1, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 1, 1, 0],
+                        [0, 1, 1, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0]
+                    ]//:
+                ];
+
+        var colors = ["#def", "#FF8DB5", "#79D3FB", "#EE941B", "#4CB849"];
+
+        // 倒计时两分钟
+        var minutes = 2;
+        var seconds = 0;
+        var countTimes=2*60; // 所需倒计时的次数
+        paint(context,minutes,seconds,countTimes);
+
+        function paint(context, minutes, seconds,countTimes) {
+            console.log(minutes,seconds,'---------paint()-----------')
+            drawNum(Math.floor(minutes / 10), context, r, R, MARGIN_LEFT, MARGIN_TOP);
+            drawNum(minutes % 10, context, r, R, 110 + MARGIN_LEFT, MARGIN_TOP);
+            drawColon((digit.length) - 1, context, r, R, 220 + MARGIN_LEFT, MARGIN_TOP); // 画冒号
+            drawNum(Math.floor(seconds / 10), context, r, R, 330 + MARGIN_LEFT, MARGIN_TOP);
+            drawNum(seconds % 10, context, r, R, 440 + MARGIN_LEFT, MARGIN_TOP);
+            function drawNum(number, context, r, R, MARGIN_LEFT, MARGIN_TOP) {
+                for (var i = 0; i < digit[0].length; i++) {
+                    for (var j = 0; j < digit[0][0].length; j++) {
+                        if (digit[number][i][j] == 1) {
+                            context.beginPath();
+                            context.arc((2 * R * j + r * j) + MARGIN_LEFT, (2 * R * i + r * i) + MARGIN_TOP, r, 0, 2 * Math.PI, false);
+                            //context.fillStyle = "#ade";
+                            var color = Math.ceil(Math.random() * (4 - 0) + 0);
+                            context.fillStyle = colors[color];
+                            context.fill();
+                            context.closePath();
+                        }
+                    }
+                }
+            }
+
+            function drawColon(number, context, r, R, MARGIN_LEFT, MARGIN_TOP) {
+                for (var i = 0; i < digit[number].length; i++) {
+                    for (var j = 0; j < digit[number][0].length; j++) {
+                        if (digit[number][i][j] == 1) {
+                            context.beginPath();
+                            context.arc((2 * R * j + r * j) + MARGIN_LEFT, (2 * R * i + r * i) + MARGIN_TOP, r, 0, 2 * Math.PI, false);
+                            context.fillStyle = "#ade";
+                            context.fill();
+                            context.closePath();
+                        }
+                    }
+                }
+            }
+            countTimes--;
+            if(countTimes>=0){
+                var minutes=Math.floor(countTimes/60);
+                var seconds=countTimes%60;
+                setTimeout(function () {
+                    context.clearRect(0, 0, 700, 500);
+                    paint(context, minutes, seconds,countTimes)
+                }, 1000);
+            }else{
+
+            }
+        }
+    }
+</script>
+</body>
+</html>

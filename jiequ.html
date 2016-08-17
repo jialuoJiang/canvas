@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        #canvas {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="600"></canvas>
+<input type="button" value="reset" id="reset">
+<script>
+    var canvas = document.getElementById("canvas");
+    var reset = document.getElementById("reset");
+    var context = canvas.getContext("2d");
+    var image = new Image();
+    var MARGIN_TOP =MARGIN_LEFT=20;
+    var dragging=false;
+    image.src = '../images/chapter4.png';
+    image.onload=imgLoadded;
+    context.lineWidth=0.5;
+    context.strokeStyle = "red";
+    function imgLoadded(e) {
+        context.clearRect(0,0,canvas.width,canvas.height); // 解决在截取一部分之后再reset 之后 两部分不图片重叠展示的问题
+        context.drawImage(image, 0, 0);
+        var canvasImageData = context.getImageData(0, 0, canvas.width, canvas.height), mousedownLoc = {}, currentLoc = {};
+        canvas.onmousedown = function (event) {
+            var clientLoc = {}
+            clientLoc.x = event.clientX;
+            clientLoc.y = event.clientY;
+            mousedownLoc = locToCanvas(clientLoc);
+            getCanvasData();
+            dragging=true;
+        }
+
+        canvas.onmousemove = function (event) {
+            if(dragging) {
+                event.preventDefault();
+                currentLoc.x = event.clientX;
+                currentLoc.y = event.clientY;
+                currentLoc = locToCanvas(currentLoc);
+                putCanvasData();
+                auxiliaryLines(currentLoc);
+                drawSquare(mousedownLoc, currentLoc);
+            }
+        }
+        canvas.onmouseup = function (event) {
+            currentLoc.x = event.clientX;
+            currentLoc.y = event.clientY;
+            currentLoc = locToCanvas(currentLoc);
+            putCanvasData();
+            drawSquare(mousedownLoc, currentLoc);
+            dragging=false;
+            dataToOffCanvas(mousedownLoc,currentLoc);
+
+        }
+
+        // 将相对于浏览器窗口的坐标转换为相对于canvas的坐标地址
+        function locToCanvas(clientLoc) {
+            var canvasLoc = {};
+            canvasLoc.x = (clientLoc.x - MARGIN_LEFT) > 0 ? clientLoc.x - MARGIN_LEFT : 0;
+            canvasLoc.y = (clientLoc.y - MARGIN_TOP) > 0 ? clientLoc.y - MARGIN_TOP : 0;
+            return canvasLoc;
+        }
+
+        // 得到canvas上的每一个像素数据
+        function getCanvasData() {
+            canvasImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        }
+
+        // 将每一个像素数据放回到canvas
+        function putCanvasData() {
+            context.putImageData(canvasImageData, 0, 0);
+        }
+
+        // 画辅助线
+        function auxiliaryLines(currentLoc) {
+            // 画x轴辅助线
+            context.beginPath();
+            context.moveTo(0, currentLoc.y);
+            context.lineTo(canvas.width, currentLoc.y);
+            context.strokeStyle = "#6DACE3";
+            context.stroke();
+            //画y轴辅助线
+            context.beginPath();
+            context.moveTo(currentLoc.x, 0);
+            context.lineTo(currentLoc.x, canvas.height);
+            context.stroke();
+        }
+
+        function drawSquare(start, end) {
+            context.save();
+            context.beginPath();
+            context.moveTo(start.x, start.y);
+            context.lineTo(end.x, start.y);
+            context.lineTo(end.x, end.y);
+            context.lineTo(start.x, end.y);
+            context.lineTo(start.x, start.y);
+            context.strokeStyle="red";
+            context.stroke();
+            context.restore();
+        }
+
+        // 将选中的区域放置到离屏canvas中
+        function dataToOffCanvas(start,end){
+            var offCanvas=document.createElement("canvas");
+            var offCanvasContext=offCanvas.getContext("2d");
+            offCanvas.width=canvas.width;
+            offCanvas.height=canvas.height;
+
+            var offImageData=context.getImageData(start.x,start.y,end.x-start.x, end.y-start.y);
+            offCanvasContext.putImageData(offImageData,0,0)
+            context.clearRect(0,0,canvas.width,canvas.height)
+            context.drawImage(offCanvas,0,0,end.x-start.x,end.y-start.y,0,0,canvas.width,canvas.height)
+
+        }
+
+        reset.onclick=function(){
+            imgLoadded()
+        }
+    }
+</script>
+
+</body>
+</html>

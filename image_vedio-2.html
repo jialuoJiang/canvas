@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图像与视频</title>
+</head>
+<body>
+缩放：<input type="checkbox" value="缩放图片" id="suof">缩放图片
+<canvas id="canvas" width="800" height="520"></canvas>
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var suof=document.getElementById("suof");
+    var image=new Image();
+    image.src='../images/chapter4.png';
+    drawImage=function(){
+        context.clearRect(0,0,canvas.width,canvas.height);
+        if(suof.checked){
+            context.drawImage(image,0,0,600,320);
+        }else{
+            context.drawImage(image,0,0)
+        }
+    }
+    suof.onchange=function(e){
+        drawImage();
+    }
+
+    image.onload=function(e){
+        drawImage();
+    }
+
+
+
+
+</script>
+</body>
+</html>

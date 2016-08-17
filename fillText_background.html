@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用渐变色及图案来填充文本</title>
+</head>
+<body>
+
+<div class="select">
+    <input type="radio" value="image" id="image-select" name="select">image
+    <input type="radio" value="gradient" id="gradient-select" name="select">gradient
+</div>
+<canvas id="canvas" width="1000" height="1000"></canvas>
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var imageSelect=document.getElementById("image-select");
+    var gradientSelect=document.getElementById("gradient-select");
+    var pattern,text='HTML5';
+    var image=new Image();
+    var gradient=context.createLinearGradient(0,0,canvas.width,canvas.height);
+    gradient.addColorStop(0,'white');
+    gradient.addColorStop(0.25,'yellow');
+    gradient.addColorStop(0.5,'orange');
+    gradient.addColorStop(0.75,'red');
+    gradient.addColorStop(1,'black');
+    image.src="../../images/1.jpg";
+    image.onload=function(e){
+        pattern=context.createPattern(image,'repeat');
+    };
+
+    imageSelect.onchange=draw;
+    gradientSelect.onchange=draw;
+    function draw(){
+         if(imageSelect.checked){
+             context.clearRect(0,0,canvas.width,canvas.height);
+             context.fillStyle=pattern;
+             drawText()
+         }
+         if(gradientSelect.checked){
+             context.clearRect(0,0,canvas.width,canvas.height);
+             context.fillStyle=gradient;
+             drawText();
+         }
+    }
+
+    function drawText(){
+        context.font='128pt Palatino';
+        context.fillText(text,0,300);
+        context.fill();
+    }
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

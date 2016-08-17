@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图像合成</title>
+    <style type="text/css">
+        #canvas{
+            border:1px solid #e5e5e5;
+            float: left;
+            margin-left: 200px;
+        }
+    </style>
+</head>
+<body>
+<select id="composite" size="11">
+    <option value="source-atop">source-atop</option>
+    <option value="source-in">source-in</option>
+    <option value="source-out">source-out</option>
+    <option value="source-over">source-over</option>
+    <option value="destination-atop">destination-atop</option>
+    <option value="destination-in">destination-in</option>
+    <option value="destination-out">destination-out</option>
+    <option value="destination-over">destination-over</option>
+    <option value="lighter">lighter</option>
+    <option value="copy">copy</option>
+    <option value="xor">xor</option>
+</select>
+<canvas id="canvas"  width="600" height="600"></canvas>
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var composite=document.getElementById("composite");
+
+
+    function drawText(context){
+        context.save();
+        context.shadowColor='rgba(100,100,150,0.8)';
+        context.shadowOffsetX=5;
+        context.shadowOffsetY=10;
+        context.shadowBlur=10;
+        context.fillStyle='cornflowerblue';
+        context.fillText('HTML5',20,200);
+        context.restore();
+    }
+
+   function windowToCanvas(canvas,x,y)
+   {
+       var bbox=canvas.getBoundingClientRect();
+       return {
+           x:(x-bbox.left)*(canvas.width/bbox.width),
+           y:(y-bbox.top)*(canvas.height/bbox.height)
+       }
+   }
+
+    context.canvas.onmousemove=function(e){
+        var loc=windowToCanvas(context.canvas, e.clientX, e.clientY);
+        context.clearRect(0,0,canvas.width,canvas.height);
+        drawText(context);
+        context.save();
+        context.globalCompositeOperation=composite.value;
+        context.beginPath();
+        context.arc(loc.x,loc.y,80,0,Math.PI*2,false);
+        context.fillStyle='black';
+        context.fill();
+        context.restore();
+    }
+
+    composite.selectedIndex=3;
+    context.lineWidth=0.5;
+    context.font='128pt Comic-sans';
+    drawText(context)
+
+</script>
+
+
+</body>
+</html>

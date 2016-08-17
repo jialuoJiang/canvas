@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图像与视频</title>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="520"></canvas>
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var image=new Image();
+    image.src='../images/chapter4.png';
+    image.onload=function(e){
+        context.drawImage(image,0,0)
+    }
+</script>
+</body>
+</html>

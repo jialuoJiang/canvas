@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>填充和描边</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div class="select">
+    <input type="checkbox" value="stroke" id="stroke">stroke
+    <input type="checkbox" value="fill" id="fill">fill
+    <input type="checkbox" value="shadow" id="shadow">shadow
+</div>
+<canvas id="canvas" width="1000" height="1000"></canvas>
+
+<script type="text/javascript">
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    context.font = '128pt Palatino';
+
+    var fills = document.getElementById('fill');
+    var shadows = document.getElementById("shadow");
+    var strokes = document.getElementById("stroke");
+
+    function stroke() {
+        context.strokeStyle="red";
+        context.strokeText('HTML5', 0, 300);
+        context.stroke();
+    }
+
+    function strokeOff() {
+        context.strokeText('', 0, 300);
+        context.stroke();
+    }
+
+    function fill() {
+        context.fillText('HTML5', 0, 300);
+        context.fill();
+    }
+    function fillOff() {
+        context.fillText('', 0, 300);
+        context.fill();
+    }
+
+    function shadow() {
+        context.shadowColor = "orange";
+        context.shadowOffsetX = 5;
+        context.shadowOffsetY = 5;
+        context.shadowBlur = 10;
+    }
+    function shadowOff() {
+        context.shadowColor = undefined;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
+        context.shadowBlur = 0;
+    }
+
+    strokes.onchange = draw;
+    fills.onchange = draw;
+    shadows.onchange = draw;
+
+    function draw() {
+        if (strokes.checked) {
+            console.log('---strokes checked')
+            stroke();
+        }
+        if (fills.checked) {
+            console.log('---fills checked')
+            fill();
+        }
+        if (shadows.checked) {
+            console.log('---shadows checked')
+            shadow();
+        }
+        if(!strokes.checked){
+            console.log('---strokes unchecked')
+            strokeOff();
+        }
+        if(!fills.checked){
+            console.log('---fills unchecked')
+            fillOff();
+        }
+        if(!shadows.checked){
+            console.log('---shadows unchecked')
+            shadowOff();
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<canvas id="canvas" style="border:1px solid #dcdcdc;margin:200px">
+
+</canvas>
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');// 得到上下文环境
+        canvas.width = 1024;
+        canvas.height = 768;
+
+        // 使用context进行绘制   canvas是基于状态的绘制，，现有状态，，再有画的动作
+
+        // 1、画直线
+
+        context.beginPath();
+        context.moveTo(100, 100);//起点
+        context.lineTo(700, 700);
+        context.lineTo(700, 100);
+        context.lineTo(100, 100);
+        context.closePath();
+        /*      context.lineWidth=5;
+         context.strokeStyle="#ff5247";
+         context.stroke();  // stroke 笔画的意思 */
+
+        /*    context.fillStyle='rgb(232,89,205)';
+         context.fill(); // 填充
+         */
+        context.lineWidth = 5;
+        context.strokeStyle = "#ff5247";
+        context.stroke();  // stroke 笔画的意思
+
+
+        // 重画一条线
+        context.beginPath();
+        context.moveTo(200, 100);
+        context.lineTo(600, 768);
+        context.closePath();
+        context.strokeStyle = 'black';
+        context.stroke();
+
+
+/*
+        // 四个三角形
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(0, 768);
+        context.lineTo(512, 389);
+        context.lineTo(0, 0);
+        context.closePath();
+        context.fillStyle = "#ff5247";
+        context.fill();
+
+        context.beginPath();
+        context.moveTo(1024, 0);
+        context.lineTo(1024, 768);
+        context.lineTo(512, 389);
+        context.lineTo(1024, 0);
+        context.closePath();
+        context.fillStyle = "#a5f";
+        context.fill();
+
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(512, 389);
+        context.lineTo(1024, 0);
+        context.lineTo(0, 0);
+        context.closePath();
+        context.fillStyle = '#4fa';
+        context.fill();
+
+        context.beginPath();
+        context.moveTo(0, 768);
+        context.lineTo(512, 389);
+        context.lineTo(1024, 768);
+        context.lineTo(0, 768);
+        context.closePath();
+        context.fillStyle = '#417';
+        context.fill();
+*/
+
+
+        var lw = [
+            {position: [{x: 0, y: 0}, {x: 0, y: 768}, {x: 512, y: 389}, {x: 0, y: 0}],           color: '#ff5247'},
+            {position: [{x: 1024, y: 0}, {x: 1024, y: 768}, {x: 512, y: 389}, {x: 1024, y: 0}],  color: '#a5f'},
+            {position: [{x: 0, y: 0}, {x: 512, y: 389}, {x: 1024, y: 0}, {x: 0, y: 0}],          color: '#4fa'},
+            {position: [{x: 0, y: 768}, {x: 512, y: 389}, {x: 1024, y: 768}, {x: 0, y: 768}],    color: '#417'}
+        ]
+
+  /*    for(var i=0;i<lw.length;i++){
+          draw(lw[i],context);
+      }
+
+        function draw(piece,context){
+            context.beginPath();
+            context.moveTo(piece.position[0].x,piece.position[0].y);
+            for(var i=0;i<piece.position.length;i++){
+                context.lineTo(piece.position[i].x,piece.position[i].y);
+            }
+            context.closePath();
+            context.fillStyle=piece.color;
+            context.fill();
+
+        }*/
+
+        for(var i=0;i<lw.length;i++){
+            context.beginPath();
+            context.moveTo(lw[i].position[0].x,lw[i].position[0].y)
+            for(var j=0;j<lw[i].position.length;j++){
+                context.lineTo(lw[i].position[j].x,lw[i].position[j].y);
+            }
+            context.closePath();
+            context.fillStyle=lw[i].color;
+            context.fill();
+        }
+
+
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        #canvas{
+            background-color: #f4f4f4;
+        }
+        #btn{
+            position: absolute;
+            top:30px;
+            left:100px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="800" height="500">亲，快去升级你的浏览器吧！！</canvas>
+<div id="radios">
+    <input type="radio" id="repeatRadio" name="repeat" checked>repeat
+    <input type="radio" id="repeatXRadio" name="repeat" >repeat-x
+    <input type="radio" id="repeatYRadio" name="repeat" >repeat-y
+    <input type="radio" id="norepeatRadio" name="repeat">no-repeat
+</div>
+
+<canvas id="canvas2" width="500" height="500"></canvas>
+
+<!--<button id="btn">清空canvas</button>-->
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    context.fillStyle="red";
+    context.fillRect(0,0,60,40);
+
+    context.beginPath();
+   // context.strokeStyle="green";
+    context.moveTo(100,100);
+    context.lineTo(140,100);
+    context.lineTo(140,140);
+    context.lineTo(100,140);
+    context.closePath();
+    context.stroke();
+
+
+    context.strokeText("12",300,300);
+
+    context.fillText("12",400,400);
+
+    context.beginPath();
+    context.arc(350,350,100,0,2*Math.PI,false);
+    //context.lineWidth=50;
+    context.lineWidth=30;
+    context.closePath();
+    context.stroke();
+
+    context.beginPath();
+    context.lineWidth=3;
+    context.lineTo(100,100);
+    context.lineTo(200,100);
+    context.stroke();
+
+    context.canvas.onmousedown=function(e){
+        context.clearRect(0,0,canvas.width,canvas.height)
+    }
+
+
+</script>
+
+<script type="text/javascript">
+    var canvas2=document.getElementById("canvas2");
+    var context2=canvas2.getContext("2d");
+    var repeatRadio=document.getElementById("repeatRadio");
+    var repeatXRadio=document.getElementById("repeatXRadio");
+    var repeatYRadio=document.getElementById("repeatYRadio");
+    var norepeatRadio=document.getElementById("norepeatRadio");
+    var image=new Image();
+    image.src='../images/circle2.png';
+
+    function fillCanvasWithPattern(repeatString){
+        var pattern=context2.createPattern(image,repeatString);
+        console.log(pattern,'-----')
+        context2.clearRect(0,0,canvas2.width,canvas2.height);
+        context2.fillStyle=pattern;
+        context2.fillRect(0,0,canvas2.width,canvas2.height);
+        context2.fill();
+    }
+
+    repeatRadio.onclick=function(e){
+        fillCanvasWithPattern('repeat');
+    }
+    repeatXRadio.onclick=function(e){
+        fillCanvasWithPattern('repeat-x');
+    }
+    repeatYRadio.onclick=function(e){
+        fillCanvasWithPattern('repeat-y');
+    }
+    norepeatRadio.onclick=function(e){
+        fillCanvasWithPattern('no-repeat');
+    }
+
+image.onload=function(e) {
+
+
+    fillCanvasWithPattern('repeat')
+}
+</script>
+
+</body>
+</html>

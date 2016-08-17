@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>渐变</title>
+</head>
+<body>
+<canvas id="canvas" style="border:1px solid #ddd; margin-top:120px;margin-left:120px"></canvas>
+<script type="text/javascript">
+    var HEIGHT=1500;
+    var WIDTH=1500;
+    window.onload=function() {
+
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext("2d");
+        canvas.height = HEIGHT;
+        canvas.width = WIDTH;
+        var gradient = context.createLinearGradient(0, 0, 400, 600);
+        gradient.addColorStop(0, 'blue');
+        gradient.addColorStop(0.25, 'white');
+        gradient.addColorStop(0.5, 'purple');
+        gradient.addColorStop(0.7, 'red');
+        gradient.addColorStop(1, 'yellow');
+        context.fillStyle = gradient;
+        context.rect(600, 600, 400, 400);
+        context.fill();
+
+
+        // 放射渐变
+
+
+        var gradient2 = context.createRadialGradient(canvas.width / 2, canvas.height, 10, canvas.width / 2, 0, 100);
+        gradient2.addColorStop(0, 'blue');
+        gradient2.addColorStop(0.25, 'white');
+        gradient2.addColorStop(0.5, 'purple');
+        gradient2.addColorStop(0.7, 'red');
+        gradient2.addColorStop(1, 'yellow');
+        context.fillStyle = gradient2;
+        context.rect(0, 0, canvas.width, canvas.height);
+        context.fill();
+    }
+</script>
+</body>
+</html>

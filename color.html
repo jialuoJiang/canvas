@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>色彩colors</title>
+</head>
+<body>
+
+<canvas id="canvas">你的浏览器该升级了</canvas>
+<script type="text/javascript">
+    var WIDTH=800;
+    var HEIGHT=600;
+    var canvas=document.getElementById("canvas");
+    canvas.height=HEIGHT;
+    canvas.width=WIDTH;
+    if(canvas.getContext){
+        var context=canvas.getContext("2d");
+
+        function colors(context){
+            for(var i=0;i<15;i++){
+                for(var j=0;j<15;j++){
+                    context.fillStyle='rgb('+Math.ceil(Math.random()*225)+','+Math.ceil(Math.random()*225)+','+Math.ceil(Math.random()*225)+')';
+                    console.log(context.fillStyle='rgb('+Math.random()*225+','+Math.random()*225+','+Math.random()*225+')','====')
+                    context.fillRect(j*25,i*25,25,25);
+                }
+            }
+        }
+        colors(context);
+
+        function draw(context){
+            for(var i=0;i<6;i++){
+                for(var j=0;j<6;j++){
+                    context.fillStyle = 'rgb(' + Math.floor(255-42.5*i) + ',' +
+                            Math.floor(255-42.5*j) + ',0)';
+                    context.fillRect(390+j*15,390+i*15,15,15)
+
+                }
+            }
+        }
+
+        draw(context)
+
+
+    }
+
+
+</script>
+</body>
+</html>

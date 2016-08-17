@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        *{
+            padding:0;
+            margin:0;
+        }
+        #scale-slider{
+
+        }
+
+    </style>
+</head>
+<body>
+<output id="scale-output">1.0</output>
+<input type="range" max="3.0" min="1.0" step="0.01" id="scale-slider">
+<canvas id="canvas" width="800" height="600"></canvas>
+<script type="text/javascript">
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    var image=new Image();
+    var scaleSlider=document.getElementById("scale-slider");
+    var scaleOutput=document.getElementById("scale-output");
+    var scale=1.0;
+    var MIN_SCALE=1.0;
+    var MAX_SCALE=3.0;
+
+    function drawImage(){
+        var w=canvas.width;
+        var h=canvas.height;
+        var sw=w*scale;
+        var sh=h*scale;
+        context.clearRect(0,0,w,h);
+        context.drawImage(image,-sw/2+w/2,-sh/2+h/2,sw,sh);
+    }
+
+    function drawScaleText(value){
+        var text=parseFloat(value).toFixed(2);
+        var percent=parseFloat(value=MIN_SCALE)/parseFloat(MAX_SCALE-MIN_SCALE);
+        scaleOutput.innerText=text;
+        percent=percent<0.35 ?0.35 :percent;
+        scaleOutput.style.fontSize=percent*MAX_SCALE/1.5+'em';
+    }
+
+    scaleSlider.onchange=function(e){
+        scale= e.target.value;
+        if(scale<MIN_SCALE) scale=MIN_SCALE;
+        else if(scale>MAX_SCALE) scale=MAX_SCALE;
+      drawScaleText(scale);
+        drawImage();
+    }
+
+    context.fillStyle='cornflowerblue';
+    context.strokeStyle="yellow";
+    context.shadowColor='rgba(50,50,50,1.0)';
+    context.shadowOffsetX=5;
+    context.shadowOffsetY=5;
+    context.shadowBlur=10;
+    image.src='../images/chapter4.png';
+    image.onload=function(e){
+        drawImage();
+       drawScaleText(scaleSlider.value)
+    }
+
+
+</script>
+
+</body>
+</html>
