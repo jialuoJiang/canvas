@@ -35,13 +35,15 @@
         // 画时针、分针和秒针
         var time = new Date();
         thetime.innerHTML = time;
-        var hour = time.getHours() % 12);
-        var minute = (time.getMinutes() % 60)  ;
+        var hour = time.getHours() % 12;
+        var minute = time.getMinutes() % 60  ;
         var second = (time.getSeconds() % 60) * (Math.PI / 30);
+		
         var hourDu=(hour+(minute*60+second)/3600)*30;
-        var hourAngle=hourDu*(Math.PI / 6);
-        var secondDu=minute+second/60*6;
-        var secondAngle=secondDu*(Math.PI / 30)
+        var hourAngle=hourDu*(Math.PI / 180);
+		
+        var secondDu=(minute+second/60)*6;
+        var secondAngle=secondDu*(Math.PI / 180);
         // 时针
         context.save();
         context.rotate(hourAngle);
